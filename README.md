@@ -4,7 +4,8 @@
 ```
 from pochta import User
 with User("al") as user:
-    text = user.get_mail()[0].text
+    for mail in user.get_mail():
+    text = mail.text
 ```
 
 Отправка
