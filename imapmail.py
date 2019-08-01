@@ -30,6 +30,36 @@ class IMAPmail:
         text, _, _ = self._get_message_info()
         return text
 
+    @property
+    def time(self, strftime=None):
+        date_tuple = email.utils.parsedate_tz(self.to_string['Date'])
+        if date_tuple:
+            local_date = datetime.datetime.fromtimestamp(email.utils.mktime_tz(date_tuple))
+            return str(local_date.strftime(strftime)) if strftime is not None else local_date
+    
+    @property
+    def email_from(self):
+        return str(email.header.make_header(email.header.decode_header(self.to_string['From'])))
+
+    @property
+    def email_to(self):
+        return str(email.header.make_header(email.header.decode_header(self.to_string['To'])))
+
+    @property
+    def subject(self):
+        return str(email.header.make_header(email.header.decode_header(self.to_string['Subject'])))
+
+    @property
+    def MIMEtype(self):
+        _, _, MIME = self._get_message_info()
+        return MIME
+    
+    @property
+    def to_string(self):
+        text = self.get_data()[0][1]
+        raw_email_string = text.decode('utf-8')
+        return email.message_from_string(raw_email_string)
+
     def _get_part_info(self, part):
         """Получить текст сообщения в правильной кодировке.
 

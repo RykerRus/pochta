@@ -25,6 +25,7 @@ class User:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.imap.quit()
         self.smtp.quit()
+
     def _load_login_and_password(self):
         self.login, self.password = _FROM_USERS[self.name].values()
     
@@ -36,7 +37,8 @@ class User:
             return "@" in email and "." in email
         return False
     
-    def send(self, to, server_name="gmail"):
+    def send(self, to):
+        self.smtp.open()
         if self.mail is None:
             warn("Error: mail no create, Please call User.new_mail method")
         
@@ -49,7 +51,13 @@ class User:
             self.mail.email_to = ",".join(to)
             self.smtp.multi_send(to)
     
-    def get_mail(self, server_name="gmail"):
+    def get_mail(self, server_name="gmail", criterion="ALL"):
         self.imap.open()
-        mail = self.imap.get_mail()
+        mail = self.imap.get_mail(criterion=criterion)
         return mail
+    
+    def before_date(self, date):
+        self.imap.open()
+        mail = self.imap.get_mail(criterion=f'(BEFORE {date.strftime("%d-%b-%Y")})')
+        return mail
+        

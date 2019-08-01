@@ -63,12 +63,14 @@ class IMAPServer:
             return
         return messages_nums[0].split()
     
-    def get_mail(self, criterion="ALL"):
+    def get_mail(self, criterion):
         msg_id = self._get_mail_ID(criterion=criterion)
         return [IMAPmail(self, id_) for id_ in msg_id[::-1]]
         
     
     def quit(self):
+        if self.__cached__ is None:
+            return
         try:
             self.__cached__.logout()
             self.online = False
