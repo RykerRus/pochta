@@ -5,7 +5,7 @@ from .smtpserver import SMTPServer
 from .imapserver import IMAPServer
 
 _FROM_USERS = {
-                "tester": {"login": "tester@imaginweb.ru", "password": ">3jEFybD>3jEFybD"},
+                "tester": {"login": "", "password": ""},
                 "al": {"login": "al8594212@gmail.com", "password": "QLTj698rm6T6BVz"}}
 
 class User:
